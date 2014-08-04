@@ -1,0 +1,25 @@
+{
+  "name": "snowplow-tracker",
+  "version": "0.1.0",
+  "devDependencies": {},
+  "contributors": [
+    "Fred Blundun"
+  ],
+  "description": "Node.js tracker for Snowplow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snowplow/snowplow-nodejs-tracker.git"
+  },
+  "bugs": "https://github.com/snowplow/snowplow-nodejs-tracker/issues",
+  "keywords": [
+    "tracking",
+    "events",
+    "open source"
+  ],
+  "license": "Apache 2.0",
+  "dependencies": {
+    "request": "^2.39.0",
+    "snowplow-tracker-core": "^0.2.0",
+    "uuid": "^1.4.1"
+  }
+}
