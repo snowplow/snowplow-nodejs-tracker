@@ -1,7 +1,9 @@
 {
   "name": "snowplow-tracker",
   "version": "0.1.0",
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^1.21.3"
+  },
   "contributors": [
     "Fred Blundun"
   ],
@@ -19,7 +21,6 @@
   "license": "Apache 2.0",
   "dependencies": {
     "request": "^2.39.0",
-    "snowplow-tracker-core": "^0.2.0",
-    "uuid": "^1.4.1"
+    "snowplow-tracker-core": "^0.2.0"
   }
 }
