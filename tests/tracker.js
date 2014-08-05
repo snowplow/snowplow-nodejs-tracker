@@ -49,6 +49,8 @@ function checkQuerystring(queryDict, expected) {
 		assert.strictEqual(expected[key], queryDict[key], key + ' should have value '  + expected[key]);
 	}
 	assert.deepEqual(queryDict['co'], completedContext, 'a custom context should be attached');
+	assert.ok(queryDict['dtm'], 'a timestamp should be attached');
+	assert.ok(queryDict['eid'], 'a UUID should be attached');
 }
 
 describe('tracker', function () {
@@ -58,6 +60,7 @@ describe('tracker', function () {
 	})
 
 	describe('#trackPageView', function () {
+		
 		it('should send a page view event', function (done) {
 			var expected = {
 				tv: 'node-' + version,
@@ -95,6 +98,55 @@ describe('tracker', function () {
 				done.apply(this, arguments);
 			});
 			t.trackStructEvent('clothes', 'add_to_basket', null, 'red', 15, context);
+		});
+	});
+
+	describe('#trackEcommerceTransaction', function () {
+
+		it('should track an ecommerce transaction', function (done) {
+			var items = [{
+				sku: 'item-729',
+				name: 'red hat',
+				category: 'headgear',
+				price: 10,
+				quantity: 1,
+				context: context
+			}];
+			var requestCount = items.length + 1;
+			var expectedTransaction = {
+				e: 'tr',
+				tr_id: 'order-7',
+				tr_af: 'affiliate',
+				tr_tt: '15',
+				tr_tx: '5',
+				tr_sh: '0',
+				tr_ci: 'Dover',
+				tr_st: 'Delaware',
+				tr_co: 'US',
+				tr_cu: 'GBP'
+			};
+			var expectedItem = {
+				e: 'ti',
+				ti_sk: 'item-729',
+				ti_nm: 'red hat',
+				ti_ca: 'headgear',
+				ti_qu: '1',
+				ti_id: 'order-7',
+				ti_cu: 'GBP'
+			};
+			var t = tracker('d3rkrsqld9gmqf.cloudfront.net', 'cf', 'cfe35', false, function(){
+				var qs = extractQueryString();
+				var expected = qs['e'] === 'tr' ? expectedTransaction : expectedItem;
+				checkQuerystring(qs, expected);
+
+				// Don't end the test until every request has been dealt with
+				nock.recorder.clear();
+				requestCount--;
+				if (!requestCount) {
+					done.apply(this, arguments);
+				}
+			});
+			t.trackEcommerceTransaction('order-7', 'affiliate', 15, 5, 0, 'Dover', 'Delaware', 'US', 'GBP', items, context);
 		});
 	});
 
