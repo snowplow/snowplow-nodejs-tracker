@@ -2,7 +2,8 @@
   "name": "snowplow-tracker",
   "version": "0.1.0",
   "devDependencies": {
-    "mocha": "^1.21.3"
+    "mocha": "^1.21.3",
+    "nock": "^0.44.0"
   },
   "contributors": [
     "Fred Blundun"
