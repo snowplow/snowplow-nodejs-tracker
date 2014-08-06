@@ -1,14 +1,45 @@
 # Node.js Analytics for Snowplow [![npm version][npm-image]][npm-url]
 
-*Work in progress*
-
 ## Overview
 
-TODO
+Add analytics to your JavaScript apps, node-webkit projects and node servers with the [Snowplow][snowplow] Node.js Tracker.
+
+This tracker lets you collect server-side event data.
 
 ## Find out more
 
-TODO
+| Technical Docs              | Setup Guide           | Roadmap & Contributing               |         
+|-----------------------------|-----------------------|--------------------------------------|
+| [ ![i1] [techdocs-image] ] [tech-docs]      | [ ![i2] [setup-image] ] [setup]   | ![i3] [roadmap-image]                |
+| [Technical Docs] [tech-docs] | [Setup Guide] [setup] | _coming soon_                        |
+
+## Developers
+
+### Getting started
+
+Make sure you have `node` and `npm` installed and in your `$PATH`.
+
+Install npm dependencies using `npm install`:
+
+```bash
+git clone git@github.com:snowplow/snowplow-nodejs-tracker.git
+cd snowplow-nodejs-tracker
+npm install
+```
+
+### Testing
+
+Install mocha globally:
+
+```bash
+sudo npm install -g mocha
+```
+
+Run the tests:
+
+```bash
+mocha tests
+```
 
 ## Copyright and license
 
@@ -29,3 +60,9 @@ limitations under the License.
 
 [npm-url]: http://badge.fury.io/js/snowplow-nodejs-tracker
 [npm-image]: https://badge.fury.io/js/snowplow-nodejs-tracker.svg
+
+[tech-docs]: https://github.com/snowplow/snowplow/wiki/nodejs-tracker
+[techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
+[setup]: https://github.com/snowplow/snowplow/wiki/nodejs-tracker-setup
+[setup-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
+[roadmap-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/roadmap.png
