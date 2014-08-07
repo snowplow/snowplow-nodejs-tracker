@@ -66,6 +66,7 @@ describe('tracker', function () {
 				tv: 'node-' + version,
 				tna: 'cf',
 				aid: 'cfe35',
+				p: 'srv',
 				e: 'pv',
 				url: 'http://www.example.com',
 				page: 'example page',
