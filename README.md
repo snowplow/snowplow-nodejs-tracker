@@ -7,7 +7,7 @@
 
 Add analytics to your JavaScript apps, node-webkit projects and node servers with the [Snowplow][snowplow] Node.js Tracker.
 
-This tracker lets you collect server-side event data.
+This tracker lets you collect event data from Node.js applications.
 
 ## Find out more
 
