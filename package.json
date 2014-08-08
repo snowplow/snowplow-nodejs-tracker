@@ -15,6 +15,8 @@
   },
   "bugs": "https://github.com/snowplow/snowplow-nodejs-tracker/issues",
   "keywords": [
+    "snowplow",
+    "analytics",
     "tracking",
     "events",
     "open source"
