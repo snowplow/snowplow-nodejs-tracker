@@ -1,4 +1,7 @@
-# Node.js Analytics for Snowplow [![npm version][npm-image]][npm-url]
+# Node.js Analytics for Snowplow 
+
+[![Build Status][travis-image]][travis]
+[![npm version][npm-image]][npm-url]
 
 ## Overview
 
@@ -58,6 +61,8 @@ limitations under the License.
 
 [license]: http://www.apache.org/licenses/LICENSE-2.0
 
+[travis-image]: https://travis-ci.org/snowplow/snowplow-nodejs-tracker.png?branch=master
+[travis]: http://travis-ci.org/snowplow/snowplow-nodejs-tracker
 [npm-url]: http://badge.fury.io/js/snowplow-nodejs-tracker
 [npm-image]: https://badge.fury.io/js/snowplow-nodejs-tracker.svg
 
