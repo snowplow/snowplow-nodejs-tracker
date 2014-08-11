@@ -63,8 +63,8 @@ limitations under the License.
 
 [travis-image]: https://travis-ci.org/snowplow/snowplow-nodejs-tracker.png?branch=master
 [travis]: http://travis-ci.org/snowplow/snowplow-nodejs-tracker
-[npm-url]: http://badge.fury.io/js/snowplow-nodejs-tracker
-[npm-image]: https://badge.fury.io/js/snowplow-nodejs-tracker.svg
+[npm-url]: http://badge.fury.io/js/snowplow-tracker
+[npm-image]: https://badge.fury.io/js/snowplow-tracker.svg
 
 [tech-docs]: https://github.com/snowplow/snowplow/wiki/nodejs-tracker
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
