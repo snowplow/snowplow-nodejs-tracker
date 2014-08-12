@@ -13,4 +13,6 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-module.exports = require('./lib/tracker.js');
+exports.tracker = require('./lib/tracker.js');
+exports.emitter = require('./lib/emitter.js');
+exports.version = require('./lib/version.js');

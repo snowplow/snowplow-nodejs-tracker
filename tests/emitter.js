@@ -57,7 +57,7 @@ describe('emitter', function () {
 		});
 
 		it('should send an HTTP GET request', function(done) {
-			var e = emitter(endpoint, 'http', 'get', null, function (error, body, response) {
+			var e = emitter(endpoint, 'http', 80, 'get', null, function (error, body, response) {
 				assert.deepEqual(response, '/i?a=b');
 				done();
 			});
@@ -65,7 +65,7 @@ describe('emitter', function () {
 		});
 
 		it('should send an HTTP POST request', function(done) {
-			var e = emitter(endpoint, 'http', 'post', 1, function (error, body, response) {
+			var e = emitter(endpoint, 'http', null, 'post', 1, function (error, body, response) {
 				assert.deepEqual(response, {a: 'b'});
 				done();
 			});
@@ -73,7 +73,7 @@ describe('emitter', function () {
 		});
 
 		it('should send an HTTPS GET request', function(done) {
-			var e = emitter(endpoint, 'https', 'get', null, function (error, body, response) {
+			var e = emitter(endpoint, 'https', 443, 'get', null, function (error, body, response) {
 				assert.deepEqual(response, '/i?a=b');
 				done();
 			});
@@ -81,7 +81,7 @@ describe('emitter', function () {
 		});
 
 		it('should not send requests if the buffer is not full', function(done) {
-			var e = emitter(endpoint, 'https', 'post', null, done);
+			var e = emitter(endpoint, 'https', null, 'post', null, done);
 			e.input({});
 			e.input({});
 			e.input({});

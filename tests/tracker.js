@@ -16,9 +16,10 @@
 var assert = require('assert');
 var nock = require('nock');
 var querystring = require('querystring');
-var tracker = require('../lib/tracker');
-var emitter = require('../lib/emitter');
-var version = require('../lib/version');
+var snowplowTracker = require('..');
+var tracker = snowplowTracker.tracker;
+var emitter = snowplowTracker.emitter;
+var version = snowplowTracker.version;
 
 var endpoint = 'd3rkrsqld9gmqf.cloudfront.net';
 
@@ -36,7 +37,7 @@ var completedContext = JSON.stringify({
 
 function getMock(method) {
 	if (method === 'get') {
-		return nock('http://d3rkrsqld9gmqf.cloudfront.net')
+		return nock('http://d3rkrsqld9gmqf.cloudfront.net:80')
 			.filteringPath(function () {return '/'})
 			.get('/')
 			.reply(200, function(uri, response){
@@ -96,7 +97,7 @@ function performTestsWithMethod(method) {
 					refr: 'google'
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					checkPayload(extractPayload(response, method), expected);
 					done.call(this, error);
 				});
@@ -122,7 +123,7 @@ function performTestsWithMethod(method) {
 					se_va: '15'
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					checkPayload(extractPayload(response, method), expected);
 					done.call(this, error);
 				});
@@ -167,7 +168,7 @@ function performTestsWithMethod(method) {
 					ti_cu: 'GBP'
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					var payloadDict = extractPayload(response, method);
 					var expected = payloadDict['e'] === 'tr' ? expectedTransaction : expectedItem;
 
@@ -205,7 +206,7 @@ function performTestsWithMethod(method) {
 					})
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					checkPayload(extractPayload(response, method), expected);
 					done.call(this, error);
 				});
@@ -236,7 +237,7 @@ function performTestsWithMethod(method) {
 					})
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					checkPayload(extractPayload(response, method), expected);
 					done.call(this, error);
 				});
@@ -266,7 +267,7 @@ function performTestsWithMethod(method) {
 					dtm: '1000000000000'
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					checkPayload(extractPayload(response, method), expected);
 					done.call(this, error);
 				});
@@ -296,7 +297,7 @@ function performTestsWithMethod(method) {
 					}
 				};
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					var pd = extractPayload(response, method, true);
 					assert.equal(pd['ue_px'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy91bnN0cnVjdF9ldmVudC9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6eyJzY2hlbWEiOiJpZ2x1OmNvbS5hY21lL3ZpZXdlZF9wcm9kdWN0L2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InByaWNlIjoyMH19fQ');
 					assert.equal(pd['cx'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy9jb250ZXh0cy9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6W3sic2NoZW1hIjoiaWdsdTpjb20uYWNtZS91c2VyL2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InR5cGUiOiJ0ZXN0ZXIifX1dfQ');
@@ -326,7 +327,7 @@ function performTestsWithMethod(method) {
 				};
 				var count = 2;
 
-				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					checkPayload(extractPayload(response, method), expected);
 					count--;
 					if (count === 0) {
