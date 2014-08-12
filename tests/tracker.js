@@ -20,15 +20,7 @@ var tracker = require('../lib/tracker');
 var emitter = require('../lib/emitter');
 var version = require('../lib/version');
 
-nock.recorder.rec({dont_print: true});
-
 var endpoint = 'd3rkrsqld9gmqf.cloudfront.net';
-
-var mock = nock('http://d3rkrsqld9gmqf.cloudfront.net')
-	.persist()
-	.filteringPath(function () {return '/'})
-	.get('/')
-	.reply(200);
 
 var context = [{
 	schema: 'iglu:com.acme/user/jsonschema/1-0-0',
@@ -42,44 +34,52 @@ var completedContext = JSON.stringify({
 	data: context
 });
 
-function getNonstandardEmitter(method, callback) {
-	return emitter(endpoint, 'http', method, 0, callback);
-}
-
-function getEmitter(method, expected, done) {
-	return getNonstandardEmitter(method, function () {
-		checkPayload(extractPayload(method), expected);
-		done.apply(this, arguments);
-	});
-}
-
-function extractPayload(method) {
+function getMock(method) {
 	if (method === 'get') {
-		return querystring.parse(nock.recorder.play()[0].split('\n')[2].slice(11, -2));		
+		return nock('http://d3rkrsqld9gmqf.cloudfront.net')
+			.filteringPath(function () {return '/'})
+			.get('/')
+			.reply(200, function(uri, response){
+				return querystring.parse(uri.slice(3));
+			});
 	} else {
-		return JSON.parse(nock.recorder.play()[0].split('\n')[2].slice(47, -1))['data'][0];
+		return nock('http://d3rkrsqld9gmqf.cloudfront.net')
+			.matchHeader('content-type', 'application/json; charset=utf-8')
+			.filteringRequestBody(function () {return '*'})
+			.post('/com.snowplowanalytics.snowplow/tp2', '*')
+			.reply(200, function(uri, body){
+				return body;
+			});
+	}
+}
+
+function extractPayload(response, method) {
+	if (method === 'get') {
+		return JSON.parse(response);
+	}
+	else {
+		return response.data[0];
 	}
 }
 
 function checkPayload(payloadDict, expected) {
 	for (var key in expected) {
-		assert.strictEqual(expected[key], payloadDict[key], key + ' should have value '  + expected[key]);
+		assert.strictEqual(expected[key], payloadDict[key]);
 	}
 	assert.deepEqual(payloadDict['co'], completedContext, 'a custom context should be attached');
 	assert.ok(payloadDict['dtm'], 'a timestamp should be attached');
 	assert.ok(payloadDict['eid'], 'a UUID should be attached');
 }
 
-function testsWithMethod(method) {
+function performTestsWithMethod(method) {
 	describe('tracker', function () {
 
-		beforeEach(function () {
+		before(function () {
 			nock.disableNetConnect();
-			nock.recorder.clear();		
 		});
 
-		afterEach(function () {
-			nock.enableNetConnect();
+		after(function () {
+			nock.cleanAll();
 		});
 
 		describe('#trackPageView', function () {
@@ -95,7 +95,14 @@ function testsWithMethod(method) {
 					page: 'example page',
 					refr: 'google'
 				};
-				var t = tracker(getEmitter(method, expected, done), 'cf', 'cfe35', false);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					checkPayload(extractPayload(response, method), expected);
+					done.call(this, error);
+				});
+				var t = tracker(e, 'cf', 'cfe35', false);
+				var mock = getMock(method);
+
 				t.trackPageView('http://www.example.com', 'example page', 'google', context);
 			});
 		});
@@ -114,7 +121,14 @@ function testsWithMethod(method) {
 					se_pr: 'red',			
 					se_va: '15'
 				};
-				var t = tracker(getEmitter(method, expected, done), 'cf', 'cfe35', false);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					checkPayload(extractPayload(response, method), expected);
+					done.call(this, error);
+				});
+				var t = tracker(e, 'cf', 'cfe35', false);
+				var mock = getMock(method);
+
 				t.trackStructEvent('clothes', 'add_to_basket', null, 'red', 15, context);
 			});
 		});
@@ -152,18 +166,21 @@ function testsWithMethod(method) {
 					ti_id: 'order-7',
 					ti_cu: 'GBP'
 				};
-				var t = tracker(getNonstandardEmitter(method, function(){
-					var qs = extractPayload(method);
-					var expected = qs['e'] === 'tr' ? expectedTransaction : expectedItem;
-					checkPayload(qs, expected);
 
-					// Don't end the test until every request has been dealt with
-					nock.recorder.clear();
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					var payloadDict = extractPayload(response, method);
+					var expected = payloadDict['e'] === 'tr' ? expectedTransaction : expectedItem;
+
+					checkPayload(payloadDict, expected);
+
 					requestCount--;
 					if (!requestCount) {
-						done.apply(this, arguments);
+						done.call(this, error);
 					}
-				}), 'cf', 'cfe35', false);
+				});
+				var t = tracker(e, 'cf', 'cfe35', false);
+				var mocks = [getMock(method), getMock(method)];
+
 				t.trackEcommerceTransaction('order-7', 'affiliate', 15, 5, 0, 'Dover', 'Delaware', 'US', 'GBP', items, context);
 			});
 		});
@@ -187,7 +204,14 @@ function testsWithMethod(method) {
 						data: inputJson
 					})
 				};
-				var t = tracker(getEmitter(method, expected, done), 'cf', 'cfe35', false);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					checkPayload(extractPayload(response, method), expected);
+					done.call(this, error);
+				});
+				var t = tracker(e, 'cf', 'cfe35', false);
+				var mock = getMock(method);
+
 				t.trackUnstructEvent(inputJson, context);
 			});
 		});	
@@ -211,7 +235,14 @@ function testsWithMethod(method) {
 						}
 					})
 				};
-				var t = tracker(getEmitter(method, expected, done), 'cf', 'cfe35', false);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					checkPayload(extractPayload(response, method), expected);
+					done.call(this, error);
+				});
+				var t = tracker(e, 'cf', 'cfe35', false);
+				var mock = getMock(method);
+
 				t.trackScreenView('title screen', '12345', context);
 			});
 		});	
@@ -234,7 +265,16 @@ function testsWithMethod(method) {
 					tz: 'Europe London',
 					dtm: '1000000000000'
 				};
-				var t = tracker(getEmitter(method, expected, done), 'cf', 'cfe35', false);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					checkPayload(extractPayload(response, method), expected);
+					done.call(this, error);
+				});
+
+				var t = tracker(e, 'cf', 'cfe35', false);
+
+				var mock = getMock(method);
+
 				t.setPlatform('web');
 				t.setUserId('jacob');
 				t.setScreenResolution(400, 200);
@@ -255,12 +295,18 @@ function testsWithMethod(method) {
 						price: 20
 					}
 				};
-				var t = tracker(getNonstandardEmitter(method, function(){
-					var qs = extractPayload(method);
-					assert.equal(qs['ue_px'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy91bnN0cnVjdF9ldmVudC9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6eyJzY2hlbWEiOiJpZ2x1OmNvbS5hY21lL3ZpZXdlZF9wcm9kdWN0L2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InByaWNlIjoyMH19fQ');
-					assert.equal(qs['cx'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy9jb250ZXh0cy9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6W3sic2NoZW1hIjoiaWdsdTpjb20uYWNtZS91c2VyL2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InR5cGUiOiJ0ZXN0ZXIifX1dfQ');
-					done.apply(this, arguments);
-				}), 'cf', 'cfe35', true);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					var pd = extractPayload(response, method, true);
+					assert.equal(pd['ue_px'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy91bnN0cnVjdF9ldmVudC9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6eyJzY2hlbWEiOiJpZ2x1OmNvbS5hY21lL3ZpZXdlZF9wcm9kdWN0L2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InByaWNlIjoyMH19fQ');
+					assert.equal(pd['cx'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy9jb250ZXh0cy9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6W3sic2NoZW1hIjoiaWdsdTpjb20uYWNtZS91c2VyL2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InR5cGUiOiJ0ZXN0ZXIifX1dfQ');
+					done.call(this, error);
+				});
+
+				var t = tracker(e, 'cf', 'cfe35', true);
+
+				var mock = getMock(method);
+
 				t.trackUnstructEvent(inputJson, context);
 			});
 		});
@@ -279,14 +325,19 @@ function testsWithMethod(method) {
 					refr: 'google'
 				};
 				var count = 2;
-				var e = getNonstandardEmitter(method, function(){
-					checkPayload(extractPayload(method), expected);
+
+				var e = emitter(endpoint, 'http', method, 0, function (error, body, response) {
+					checkPayload(extractPayload(response, method), expected);
 					count--;
 					if (count === 0) {
 						done.apply(this, arguments);
 					}
 				});
+
 				var t = tracker([e, e], 'cf', 'cfe35', false);
+
+				var mocks = [getMock(method), getMock(method)];
+
 				t.trackPageView('http://www.example.com', 'example page', 'google', context);
 			});
 		});
@@ -294,9 +345,9 @@ function testsWithMethod(method) {
 }
 
 describe('GET', function(){
-	testsWithMethod('get')
+	performTestsWithMethod('get');
 });
 
 describe('POST', function(){
-	testsWithMethod('post')
+	performTestsWithMethod('post');
 });
