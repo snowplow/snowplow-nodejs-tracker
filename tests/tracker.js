@@ -31,7 +31,7 @@ var context = [{
 }];
 
 var completedContext = JSON.stringify({
-	schema: 'iglu:com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0',
+	schema: 'iglu:com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-1',
 	data: context
 });
 
@@ -300,7 +300,7 @@ function performTestsWithMethod(method) {
 				var e = emitter(endpoint, 'http', null, method, 0, function (error, body, response) {
 					var pd = extractPayload(response, method, true);
 					assert.equal(pd['ue_px'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy91bnN0cnVjdF9ldmVudC9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6eyJzY2hlbWEiOiJpZ2x1OmNvbS5hY21lL3ZpZXdlZF9wcm9kdWN0L2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InByaWNlIjoyMH19fQ');
-					assert.equal(pd['cx'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy9jb250ZXh0cy9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6W3sic2NoZW1hIjoiaWdsdTpjb20uYWNtZS91c2VyL2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InR5cGUiOiJ0ZXN0ZXIifX1dfQ');
+					assert.equal(pd['cx'], 'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy9jb250ZXh0cy9qc29uc2NoZW1hLzEtMC0xIiwiZGF0YSI6W3sic2NoZW1hIjoiaWdsdTpjb20uYWNtZS91c2VyL2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InR5cGUiOiJ0ZXN0ZXIifX1dfQ');
 					done.call(this, error);
 				});
 
