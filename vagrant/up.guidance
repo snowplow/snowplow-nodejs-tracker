@@ -1,0 +1,6 @@
+To get started:
+vagrant ssh
+cd /vagrant
+npm install
+sudo npm install -g mocha
+mocha
