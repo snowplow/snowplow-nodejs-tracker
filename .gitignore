@@ -7,9 +7,11 @@ lib-cov
 *.out
 *.pid
 *.gz
-
 npm-debug.log
 node_modules
+
+# Coverage
+coverage
 
 # Vagrant
 .vagrant

@@ -2,6 +2,9 @@
 
 [![Build Status][travis-image]][travis]
 [![npm version][npm-image]][npm-url]
+<a href="https://coveralls.io/r/snowplow/snowplow-nodejs-tracker?branch=master">
+	<img src="https://coveralls.io/repos/snowplow/snowplow-nodejs-tracker/badge.png?branch=master" height="20px">
+</a>
 
 ## Overview
 
