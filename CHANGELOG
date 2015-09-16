@@ -1,3 +1,17 @@
+Version 0.2.0 (2015-xx-xx)
+--------------------------
+Removed callback argument from tracker constructor (closes #19)
+Added Coveralls code coverage button to README (#8)
+Fixed links to wiki (#7)
+Added Vagrant quickstart (#15)
+Bumped Core version to 0.4.0 (#9)
+Added POST support to tracker.js (#4)
+Added integration tests for POST requests (#21)
+Rewrote tests to use mocking object callbacks rather than nock.recorder (#20)
+Renamed "tests" directory to "test", in line with mocha's expectations (#14)
+Added emitter function (#5)
+Fixed npm badge link (#3)
+
 Version 0.1.1 (2014-12-18)
 --------------------------
 Republished to npm as snowplow-tracker 0.1.1 (#10)
