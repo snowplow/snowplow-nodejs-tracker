@@ -31,20 +31,7 @@ Install npm dependencies using `npm install`:
 git clone git@github.com:snowplow/snowplow-nodejs-tracker.git
 cd snowplow-nodejs-tracker
 npm install
-```
-
-### Testing
-
-Install mocha globally:
-
-```bash
-sudo npm install -g mocha
-```
-
-Run the tests:
-
-```bash
-mocha tests
+npm test
 ```
 
 ## Copyright and license
