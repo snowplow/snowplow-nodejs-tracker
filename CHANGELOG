@@ -1,6 +1,6 @@
-Version 0.2.0 (2015-xx-xx)
+Version 0.2.0 (2015-10-09)
 --------------------------
-Removed callback argument from tracker constructor (closes #19)
+Removed callback argument from tracker constructor (#19)
 Added Coveralls code coverage button to README (#8)
 Fixed links to wiki (#7)
 Added Vagrant quickstart (#15)
