@@ -1,9 +1,15 @@
 {
   "name": "snowplow-tracker",
-  "version": "0.1.1",
+  "version": "0.2.0",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha",
+    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*"
+  },
   "devDependencies": {
     "mocha": "^1.21.3",
-    "nock": "^0.44.0"
+    "nock": "^0.44.0",
+    "istanbul": "~0.3.20",
+    "coveralls": "~2.11.4"
   },
   "contributors": [
     "Fred Blundun"
@@ -24,6 +30,6 @@
   "license": "Apache 2.0",
   "dependencies": {
     "request": "^2.39.0",
-    "snowplow-tracker-core": "^0.2.0"
+    "snowplow-tracker-core": "^0.4.0"
   }
 }

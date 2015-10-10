@@ -2,6 +2,9 @@
 
 [![Build Status][travis-image]][travis]
 [![npm version][npm-image]][npm-url]
+<a href="https://coveralls.io/r/snowplow/snowplow-nodejs-tracker?branch=master">
+	<img src="https://coveralls.io/repos/snowplow/snowplow-nodejs-tracker/badge.png?branch=master" height="20px">
+</a>
 
 ## Overview
 
@@ -28,20 +31,7 @@ Install npm dependencies using `npm install`:
 git clone git@github.com:snowplow/snowplow-nodejs-tracker.git
 cd snowplow-nodejs-tracker
 npm install
-```
-
-### Testing
-
-Install mocha globally:
-
-```bash
-sudo npm install -g mocha
-```
-
-Run the tests:
-
-```bash
-mocha tests
+npm test
 ```
 
 ## Copyright and license
@@ -63,11 +53,11 @@ limitations under the License.
 
 [travis-image]: https://travis-ci.org/snowplow/snowplow-nodejs-tracker.png?branch=master
 [travis]: http://travis-ci.org/snowplow/snowplow-nodejs-tracker
-[npm-url]: http://badge.fury.io/js/snowplow-nodejs-tracker
-[npm-image]: https://badge.fury.io/js/snowplow-nodejs-tracker.svg
+[npm-url]: http://badge.fury.io/js/snowplow-tracker
+[npm-image]: https://badge.fury.io/js/snowplow-tracker.svg
 
-[tech-docs]: https://github.com/snowplow/snowplow/wiki/nodejs-tracker
+[tech-docs]: https://github.com/snowplow/snowplow/wiki/node.js-tracker
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
-[setup]: https://github.com/snowplow/snowplow/wiki/nodejs-tracker-setup
+[setup]: https://github.com/snowplow/snowplow/wiki/node.js-tracker-setup
 [setup-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
 [roadmap-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/roadmap.png
