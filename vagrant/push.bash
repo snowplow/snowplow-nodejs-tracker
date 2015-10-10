@@ -58,7 +58,7 @@ function get_tracker_version {
 function cd_root() {
 	source="${BASH_SOURCE[0]}"
 	while [ -h "${source}" ] ; do source="$(readlink "${source}")"; done
-	dir="$( cd -P "$( dirname "${source}" )/../.." && pwd )"
+	dir="$( cd -P "$( dirname "${source}" )/.." && pwd )"
 	cd ${dir}
 }
 
