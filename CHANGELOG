@@ -11,6 +11,7 @@ Rewrote tests to use mocking object callbacks rather than nock.recorder (#20)
 Renamed "tests" directory to "test", in line with mocha's expectations (#14)
 Added emitter function (#5)
 Fixed npm badge link (#3)
+Added ability to specify collector port (#18)
 
 Version 0.1.1 (2014-12-18)
 --------------------------
