@@ -54,7 +54,7 @@ function getMock(method) {
 
 function extractPayload(response, method) {
 	if (method === 'get') {
-		return JSON.parse(response);
+		return response;
 	}
 	else {
 		return response.data[0];
