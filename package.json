@@ -12,7 +12,8 @@
     "coveralls": "~2.11.4"
   },
   "contributors": [
-    "Fred Blundun"
+    "Fred Blundun",
+    "Anton Parkhomenko"
   ],
   "description": "Node.js tracker for Snowplow",
   "repository": {
@@ -29,7 +30,7 @@
   ],
   "license": "Apache 2.0",
   "dependencies": {
-    "request": "^2.39.0",
+    "request": "^2.81.0",
     "snowplow-tracker-core": "^0.5.0"
   }
 }
