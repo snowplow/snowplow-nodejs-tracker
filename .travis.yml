@@ -8,3 +8,7 @@ script:
 after_script:
   - "cat coverage/lcov.info"
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+env:
+  global:
+    # NPM_AUTH_TOKEN
+    secure: goIuZqbvukt7LXRKzEqXhKb9xqizr7ikxm8KRD/mUiGBJ1xikehQFKSTulJoPfsyOPe3WOfhq1aKZwRCzDXbqt9oSbJoMhgSTn/jB274WYv8VuTWZQUVIeruba0ma1spyQSag1o+WaDYVRUfy1mEkUX7jQJY4lxEUJP1bFHREig=
