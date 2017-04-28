@@ -1,6 +1,6 @@
 {
   "name": "snowplow-tracker",
-  "version": "0.3.0",
+  "version": "0.3.0-beta.1",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
     "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*"
