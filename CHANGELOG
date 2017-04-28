@@ -1,3 +1,12 @@
+Version 0.3.0 (2017-04-28)
+--------------------------
+Add npm credentials to .travis.yml (#36)
+Bump request to 2.81.0 (#34)
+Bump Core to 0.5.0 (#33)
+Add agentOptions argument to emitter (#30)
+Add latest Node.js versions to travis.yml (#32)
+Update README markdown in according with CommonMark (#31)
+
 Version 0.2.0 (2015-10-09)
 --------------------------
 Removed callback argument from tracker constructor (#19)
