@@ -65,7 +65,7 @@ function checkPayload(payloadDict, expected) {
 	for (var key in expected) {
 		assert.strictEqual(expected[key], payloadDict[key]);
 	}
-	assert.deepEqual(payloadDict['co'], completedContext, 'a custom context should be attached');
+	assert.deepStrictEqual(payloadDict['co'], completedContext, 'a custom context should be attached');
 	assert.ok(payloadDict['dtm'], 'a timestamp should be attached');
 	assert.ok(payloadDict['eid'], 'a UUID should be attached');
 }

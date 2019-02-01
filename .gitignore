@@ -12,6 +12,7 @@ node_modules
 
 # Coverage
 coverage
+.nyc_output
 
 # Vagrant
 .vagrant
