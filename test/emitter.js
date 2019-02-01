@@ -13,7 +13,8 @@
 
 var assert = require('assert');
 var nock = require('nock');
-var emitter = require('../lib/emitter');
+var snowplowTracker = require('..');
+var emitter = snowplowTracker.emitter;
 
 var endpoint = 'd3rkrsqld9gmqf.cloudfront.net';
 
@@ -39,7 +40,7 @@ var postMock = nock('http://' + endpoint, {
 				.filteringRequestBody(function () {return '*'})
 				.post('/com.snowplowanalytics.snowplow/tp2', '*')
 				.reply(200, function(uri, body){
-					return JSON.parse(body).data[0];
+					return body.data[0];
 				});
 
 describe('emitter', function () {
@@ -56,7 +57,7 @@ describe('emitter', function () {
 
 		it('should send an HTTP GET request', function(done) {
 			var e = emitter(endpoint, 'http', 80, 'get', null, function (error, body, response) {
-				assert.deepEqual(response, '/i?a=b');
+				assert.deepStrictEqual(response, '/i?a=b');
 				done();
 			});
 			e.input({a: 'b'});
@@ -64,7 +65,7 @@ describe('emitter', function () {
 
 		it('should send an HTTP POST request', function(done) {
 			var e = emitter(endpoint, 'http', null, 'post', 1, function (error, body, response) {
-				assert.deepEqual(response, {a: 'b'});
+				assert.deepStrictEqual(response, {a: 'b'});
 				done();
 			});
 			e.input({a: 'b'});
@@ -72,7 +73,7 @@ describe('emitter', function () {
 
 		it('should send an HTTPS GET request', function(done) {
 			var e = emitter(endpoint, 'https', 443, 'get', null, function (error, body, response) {
-				assert.deepEqual(response, '/i?a=b');
+				assert.deepStrictEqual(response, '/i?a=b');
 				done();
 			});
 			e.input({a: 'b'});
