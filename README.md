@@ -61,3 +61,5 @@ limitations under the License.
 [setup]: https://github.com/snowplow/snowplow/wiki/node.js-tracker-setup
 [setup-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
 [roadmap-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/roadmap.png
+
+<blockquote>(c) 2020 Pluto Inc.</blockquote>
