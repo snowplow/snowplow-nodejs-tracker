@@ -86,5 +86,11 @@ describe('emitter', function () {
 			done();
 		});
 
+		it('should not send requests if the buffer is empty', function(done) {
+			var e = emitter(endpoint, 'https', null, 'post', null, done);
+			e.flush();
+			done();
+		})
+
 	});
 });
