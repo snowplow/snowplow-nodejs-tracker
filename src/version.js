@@ -1,7 +1,7 @@
 /*
- * Node.js tracker for Snowplow: index.js
+ * Node.js tracker for Snowplow: version.js
  * 
- * Copyright (c) 2014-2015 Snowplow Analytics Ltd. All rights reserved.
+ * Copyright (c) 2014-2017 Snowplow Analytics Ltd. All rights reserved.
  *
  * This program is licensed to you under the Apache License Version 2.0,
  * and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -13,6 +13,4 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-exports.tracker = require('./lib/tracker.js');
-exports.emitter = require('./lib/emitter.js');
-exports.version = require('./lib/version.js');
+export const version = '0.3.0'

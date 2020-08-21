@@ -13,7 +13,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-var request = require('request');
+import request from 'request'
 
 /**
  * Create an emitter object which will send events to a collector
@@ -26,7 +26,7 @@ var request = require('request');
  * @param function callback Callback passed to the request function
  * @param agentOptions configuration for http.Agent class
  */
-function emitter(endpoint, protocol, port, method, bufferSize, callback, agentOptions) {
+export const emitter = function(endpoint, protocol, port, method, bufferSize, callback, agentOptions) {
 	protocol = (protocol || 'http').toLowerCase();
 	method = (method || 'get').toLowerCase();
 	if (bufferSize === null || typeof bufferSize === 'undefined') {
@@ -88,7 +88,7 @@ function emitter(endpoint, protocol, port, method, bufferSize, callback, agentOp
  *
  * @param object payload Payload on which the new dictionary is based
  */
-function valuesToStrings(payload) {
+const valuesToStrings = function(payload) {
 	var stringifiedPayload = {};
 	for (var key in payload) {
 		if (payload.hasOwnProperty(key)) {
@@ -97,5 +97,3 @@ function valuesToStrings(payload) {
 	}
 	return stringifiedPayload;
 }
-
-module.exports = emitter;

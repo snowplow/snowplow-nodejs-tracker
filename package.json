@@ -1,15 +1,21 @@
 {
   "name": "snowplow-tracker",
   "version": "0.3.0",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "mocha",
     "test+coverage": "nyc --reporter=lcov npm test"
   },
+  "files": [
+    "dist"
+  ],
   "contributors": [
     "Fred Blundun",
-    "Anton Parkhomenko"
+    "Anton Parkhomenko",
+    "Paul Boocock"
   ],
   "description": "Node.js tracker for Snowplow",
   "repository": {
