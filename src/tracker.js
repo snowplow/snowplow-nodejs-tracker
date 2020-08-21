@@ -13,8 +13,8 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-var version = require('./version');
-var core = require('snowplow-tracker-core').trackerCore;
+import { version } from './version'
+import * as core from 'snowplow-tracker-core'
 
 /**
  * Snowplow Node.js Tracker
@@ -24,12 +24,12 @@ var core = require('snowplow-tracker-core').trackerCore;
  * @param string appId The application ID
  * @param boolean encodeBase64 Whether unstructured events and custom contexts should be base 64 encoded
  */
-function tracker(emitters, namespace, appId, encodeBase64) {
+export const tracker = function(emitters, namespace, appId, encodeBase64) {
 	if (!(emitters instanceof Array)) {
 		emitters = [emitters];
 	}
 	encodeBase64 = encodeBase64 !== false;
-	var trackerCore = core(encodeBase64, sendPayload);
+	var trackerCore = core.trackerCore(encodeBase64, sendPayload);
 
 	trackerCore.setPlatform('srv'); // default platform
 	trackerCore.setTrackerVersion('node-' + version);
@@ -109,5 +109,3 @@ function tracker(emitters, namespace, appId, encodeBase64) {
 
 	return trackerCore;
 }
-
-module.exports = tracker;
