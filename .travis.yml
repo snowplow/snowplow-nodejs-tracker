@@ -1,8 +1,8 @@
 language: node_js
 node_js:
- - "7.9.0"
- - "6.10.2"
- - "5.12.0"
+ - 10
+ - 12
+ - 14
 script:
  - "npm run build"
  - "npm run test+coverage"
@@ -17,5 +17,5 @@ deploy:
 - provider: script
   script: ./.travis/deploy.py
   on:
-    condition: '"${TRAVIS_NODE_VERSION}" == "7.9.0"' 
+    condition: '"${TRAVIS_NODE_VERSION}" == "12"' 
     tags: true
