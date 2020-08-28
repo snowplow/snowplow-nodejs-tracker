@@ -1,8 +1,9 @@
 {
   "name": "snowplow-tracker",
   "version": "0.3.0",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
@@ -33,13 +34,21 @@
   "license": "Apache 2.0",
   "dependencies": {
     "request": "^2.88.2",
-    "snowplow-tracker-core": "^0.8.0"
+    "snowplow-tracker-core": "0.9.0",
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
+    "@types/node": "^14.6.0",
+    "@types/request": "^2.48.5",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "@wessberg/rollup-plugin-ts": "^1.3.3",
     "coveralls": "^3.1.0",
-    "nyc": "^15.1.0",
+    "eslint": "^7.7.0",
     "mocha": "^8.1.1",
     "nock": "^13.0.4",
-    "rollup": "^2.26.4"
+    "nyc": "^15.1.0",
+    "rollup": "^2.26.4",
+    "typescript": "^3.9.7"
   }
 }
