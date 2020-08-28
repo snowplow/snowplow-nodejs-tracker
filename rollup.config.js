@@ -1,17 +1,19 @@
-// import typescript from 'rollup-plugin-typescript';
+import ts from "@wessberg/rollup-plugin-ts"; // Prefered over @rollup/plugin-typescript as it bundles .d.ts files
 import pkg from './package.json';
+
+import { builtinModules } from "module";
 
 export default [
 	// CommonJS (for Node) and ES module (for bundlers) build.
 	{
-		input: 'src/main.js',
-		external: ['request', 'snowplow-tracker-core'],
+		input: 'src/index.ts',
+		external: [...builtinModules, ...Object.keys(pkg.dependencies), ...Object.keys(pkg.devDependencies)],
 		plugins: [
-			// typescript() // so Rollup can convert TypeScript to JavaScript
+			ts() // so Rollup can convert TypeScript to JavaScript
 		],
 		output: [
-			{ file: pkg.main, format: 'cjs' },
-			{ file: pkg.module, format: 'es' }
+			{ file: pkg.main, format: 'cjs', sourcemap: true },
+			{ file: pkg.module, format: 'es', sourcemap: true }
 		]
 	}
 ];
