@@ -68,10 +68,19 @@ export interface Tracker extends Core {
  * @param string appId The application ID
  * @param boolean encodeBase64 Whether unstructured events and custom contexts should be base 64 encoded
  */
-export function tracker(emitters: Array<Emitter>, namespace: string, appId: string, encodeBase64: boolean): Tracker {
-  if (!(emitters instanceof Array)) {
-    emitters = [emitters];
+export function tracker(
+  emitters: Emitter | Array<Emitter>,
+  namespace: string,
+  appId: string,
+  encodeBase64: boolean
+): Tracker {
+  let allEmitters: Array<Emitter>;
+  if (emitters instanceof Array) {
+    allEmitters = emitters;
+  } else {
+    allEmitters = [emitters];
   }
+
   encodeBase64 = encodeBase64 !== false;
 
   /**
@@ -81,8 +90,8 @@ export function tracker(emitters: Array<Emitter>, namespace: string, appId: stri
    */
   const sendPayload = (payload: PayloadData): void => {
     const builtPayload = payload.build();
-    for (let i = 0; i < emitters.length; i++) {
-      emitters[i].input(builtPayload);
+    for (let i = 0; i < allEmitters.length; i++) {
+      allEmitters[i].input(builtPayload);
     }
   };
 
