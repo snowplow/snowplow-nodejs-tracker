@@ -14,5 +14,5 @@
  */
 
 export { tracker, Tracker, EcommerceTransactionItem } from './tracker';
-export { emitter, Emitter } from './emitter';
+export { emitter, Emitter, HttpMethod, HttpProtocol } from './emitter';
 export { version } from './version';

@@ -23,6 +23,16 @@ export interface Emitter {
   input: (payload: PayloadDictionary) => void;
 }
 
+export enum HttpProtocol {
+  HTTP = "http",
+  HTTPS = "https"
+}
+
+export enum HttpMethod {
+  GET = "get",
+  POST = "post"
+}
+
 /**
  * Create an emitter object which will send events to a collector
  *
@@ -36,20 +46,16 @@ export interface Emitter {
  */
 export function emitter(
   endpoint: string,
-  protocol: string,
+  protocol: HttpProtocol,
   port?: number,
-  method?: string,
+  method?: HttpMethod,
   bufferSize?: number,
   callback?: request.RequestCallback,
   agentOptions?: http.AgentOptions | https.AgentOptions
 ): Emitter {
-  protocol = (protocol || 'http').toLowerCase();
-  method = (method || 'get').toLowerCase();
-
-  const maxBufferLength = bufferSize || (method === 'get' ? 0 : 10);
-  const portString = port ? ':' + port : '';
-  const path = method === 'get' ? '/i' : '/com.snowplowanalytics.snowplow/tp2';
-  const targetUrl = protocol + '://' + endpoint + portString + path;
+  const maxBufferLength = bufferSize ?? (method === HttpMethod.GET ? 0 : 10);
+  const path = method === HttpMethod.GET ? '/i' : '/com.snowplowanalytics.snowplow/tp2';
+  const targetUrl = protocol + '://' + endpoint + (port ? ':' + port : '') + path;
 
   let buffer: Array<PayloadDictionary> = [];
 
@@ -78,7 +84,7 @@ export function emitter(
       return;
     }
 
-    if (method === 'post') {
+    if (method === HttpMethod.POST) {
       const postJson = {
         schema: 'iglu:com.snowplowanalytics.snowplow/payload_data/jsonschema/1-0-4',
         data: bufferCopy.map(valuesToStrings),
