@@ -58,6 +58,14 @@ export interface Tracker extends Core {
     context?: Array<SelfDescribingJson>,
     tstamp?: Timestamp
   ) => PayloadData;
+
+  /**
+   * Set the domain user ID
+   *
+   * @param userId The domain user id
+   */
+  setDomainUserId: (userId: string) => void;
+
 }
 
 /**
@@ -74,7 +82,9 @@ export function tracker(
   appId: string,
   encodeBase64: boolean
 ): Tracker {
+  let domainUserId: string;
   let allEmitters: Array<Emitter>;
+
   if (emitters instanceof Array) {
     allEmitters = emitters;
   } else {
@@ -83,12 +93,17 @@ export function tracker(
 
   encodeBase64 = encodeBase64 !== false;
 
+  const addUserInformation = (payload: PayloadData): void => {
+    payload.add('duid', domainUserId);
+  };
+
   /**
    * Send the payload for an event to the endpoint
    *
    * @param payload Dictionary of name-value pairs for the querystring
    */
   const sendPayload = (payload: PayloadData): void => {
+    addUserInformation(payload);
     const builtPayload = payload.build();
     for (let i = 0; i < allEmitters.length; i++) {
       allEmitters[i].input(builtPayload);
@@ -150,8 +165,13 @@ export function tracker(
     return payloadData;
   };
 
+  const setDomainUserId = function (userId: string) {
+    domainUserId = userId;
+  }
+
   return {
     trackEcommerceTransactionWithItems,
+    setDomainUserId,
     ...core,
   };
 }
