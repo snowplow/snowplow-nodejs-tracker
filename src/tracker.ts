@@ -66,6 +66,12 @@ export interface Tracker extends Core {
    */
   setDomainUserId: (userId: string) => void;
 
+  /**
+   * Set the network user ID
+   *
+   * @param userId The network user id
+   */
+  setNetworkUserId: (userId: string) => void;
 }
 
 /**
@@ -83,6 +89,7 @@ export function tracker(
   encodeBase64: boolean
 ): Tracker {
   let domainUserId: string;
+  let networkUserId: string;
   let allEmitters: Array<Emitter>;
 
   if (emitters instanceof Array) {
@@ -95,6 +102,7 @@ export function tracker(
 
   const addUserInformation = (payload: PayloadData): void => {
     payload.add('duid', domainUserId);
+    payload.add('nuid', networkUserId);
   };
 
   /**
@@ -169,9 +177,14 @@ export function tracker(
     domainUserId = userId;
   }
 
+  const setNetworkUserId = function (userId: string) {
+    networkUserId = userId;
+  }
+
   return {
     trackEcommerceTransactionWithItems,
     setDomainUserId,
+    setNetworkUserId,
     ...core,
   };
 }

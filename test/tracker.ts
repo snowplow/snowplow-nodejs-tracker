@@ -417,4 +417,19 @@ for (const method of testMethods) {
     track.setDomainUserId('duid-test-1234');
     track.trackPageView('http://www.example.com', 'example page', 'google', context);
   });
+
+  test.cb(method + ' method: setNetworkUserID should attach a nuid property to event', (t) => {
+    const expected = {
+      nuid: 'nuid-test-1234'
+    };
+
+    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
+      checkPayload(extractPayload(response, method), expected, t);
+      t.end(error);
+    });
+
+    const track = tracker(e, 'cf', 'cfe35', false);
+    track.setNetworkUserId('nuid-test-1234');
+    track.trackPageView('http://www.example.com', 'example page', 'google', context);
+  });
 }
