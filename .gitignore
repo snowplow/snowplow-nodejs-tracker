@@ -14,7 +14,3 @@ dist
 # Coverage
 coverage
 .nyc_output
-
-# Vagrant
-.vagrant
-VERSION
