@@ -64,15 +64,23 @@ export function emitter(
    *
    * @param payload Payload on which the new dictionary is based
    */
-  const valuesToStrings = (payload: PayloadDictionary): Record<string, string> => {
+  const preparePayload = (payload: PayloadDictionary): Record<string, string> => {
     const stringifiedPayload: Record<string, string> = {};
-    for (const key in payload) {
-      if (Object.prototype.hasOwnProperty.call(payload, key)) {
-        stringifiedPayload[key] = String(payload[key]);
+
+    const finalPayload = addDeviceSentTimestamp(payload);
+
+    for (const key in finalPayload) {
+      if (Object.prototype.hasOwnProperty.call(finalPayload, key)) {
+        stringifiedPayload[key] = String(finalPayload[key]);
       }
     }
     return stringifiedPayload;
   };
+
+  const addDeviceSentTimestamp = (payload: PayloadDictionary): PayloadDictionary => {
+    payload['stm'] = new Date().getTime().toString();
+    return payload;
+  }
 
   /**
    * Flushes all events currently stored in buffer
@@ -87,7 +95,7 @@ export function emitter(
     if (method === HttpMethod.POST) {
       const postJson = {
         schema: 'iglu:com.snowplowanalytics.snowplow/payload_data/jsonschema/1-0-4',
-        data: bufferCopy.map(valuesToStrings),
+        data: bufferCopy.map(preparePayload),
       };
       request.post(
         {
@@ -106,7 +114,7 @@ export function emitter(
           {
             url: targetUrl,
             agentOptions: agentOptions,
-            qs: bufferCopy[i],
+            qs: addDeviceSentTimestamp(bufferCopy[i]),
           },
           callback
         );
