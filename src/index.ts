@@ -13,6 +13,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+export { Emitter, HttpMethod, HttpProtocol } from './emitter';
 export { tracker, Tracker, EcommerceTransactionItem } from './tracker';
-export { emitter, Emitter, HttpMethod, HttpProtocol } from './emitter';
+export { gotEmitter } from './got_emitter';
 export { version } from './version';
