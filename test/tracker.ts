@@ -14,9 +14,9 @@
 import test, { ExecutionContext } from 'ava';
 import nock from 'nock';
 import querystring from 'querystring';
-import { tracker, emitter, version } from '../src/index';
 import { PayloadDictionary } from 'snowplow-tracker-core';
-import { HttpMethod, HttpProtocol } from '../src/emitter';
+
+import { tracker, gotEmitter, version, HttpMethod, HttpProtocol } from '../src/index';
 
 const testMethods = [HttpMethod.GET, HttpMethod.POST];
 
@@ -36,40 +36,27 @@ const completedContext = JSON.stringify({
   data: context,
 });
 
-nock('http://' + endpoint, {
-  filteringScope: function () {
-    return true;
-  },
-})
+nock(new RegExp('https*://' + endpoint))
   .persist()
-  .filteringPath(function () {
-    return '/';
-  })
+  .filteringPath(() => '/')
   .get('/')
-  .reply(200, function (uri) {
-    return querystring.parse(uri.slice(3));
-  });
+  .reply(200, (uri) => querystring.parse(uri.slice(3)));
 
-nock('http://' + endpoint, {
-  filteringScope: function () {
-    return true;
-  },
-})
+nock(new RegExp('https*://' + endpoint))
   .matchHeader('content-type', 'application/json; charset=utf-8')
   .persist()
-  .filteringRequestBody(function () {
-    return '*';
-  })
+  .filteringRequestBody(() => '*')
   .post('/com.snowplowanalytics.snowplow/tp2', '*')
-  .reply(200, function (_uri, body) {
-    return body;
-  });
+  .reply(200, (_uri, body) => body);
 
-function extractPayload(response: unknown, method: string): PayloadDictionary {
+function extractPayload(response?: string, method?: string): PayloadDictionary {
+  if (!response) return {};
+
+  const parsed = JSON.parse(response);
   if (method === 'get') {
-    return JSON.parse(response as string);
+    return parsed;
   } else {
-    return ((response as Record<string, unknown>)['data'] as Array<unknown>)[0] as PayloadDictionary;
+    return (parsed['data'] as Array<unknown>)[0] as PayloadDictionary;
   }
 }
 
@@ -101,8 +88,11 @@ for (const method of testMethods) {
       refr: 'google',
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 
@@ -123,8 +113,11 @@ for (const method of testMethods) {
       se_va: '15',
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 
@@ -132,43 +125,32 @@ for (const method of testMethods) {
     track.trackStructEvent('clothes', 'add_to_basket', 'jumper', 'red', 15, context);
   });
 
-  test.cb(
-    method + ' method: trackEcommerceTransactionWithItems should track an ecommerce transaction',
-    (t) => {
-      const expectedTransaction = {
-        e: 'tr',
-        tr_id: 'order-7',
-        tr_af: 'affiliate',
-        tr_tt: '15',
-        tr_tx: '5',
-        tr_sh: '0',
-        tr_ci: 'Dover',
-        tr_st: 'Delaware',
-        tr_co: 'US',
-        tr_cu: 'GBP',
-      };
+  test.cb(method + ' method: trackEcommerceTransactionWithItems should track an ecommerce transaction', (t) => {
+    const expectedTransaction = {
+      e: 'tr',
+      tr_id: 'order-7',
+      tr_af: 'affiliate',
+      tr_tt: '15',
+      tr_tx: '5',
+      tr_sh: '0',
+      tr_ci: 'Dover',
+      tr_st: 'Delaware',
+      tr_co: 'US',
+      tr_cu: 'GBP',
+    };
 
-      const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-        const payloadDict = extractPayload(response, method);
-        checkPayload(payloadDict, expectedTransaction, t);
-        t.end(error);
-      });
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      const payloadDict = extractPayload(response?.body, method);
+      checkPayload(payloadDict, expectedTransaction, t);
+      t.end(error);
+    });
 
-      const track = tracker(e, 'cf', 'cfe35', false);
-      track.trackEcommerceTransaction(
-        'order-7',
-        'affiliate',
-        '15',
-        '5',
-        '0',
-        'Dover',
-        'Delaware',
-        'US',
-        'GBP',
-        context
-      );
-    }
-  );
+    const track = tracker(e, 'cf', 'cfe35', false);
+    track.trackEcommerceTransaction('order-7', 'affiliate', '15', '5', '0', 'Dover', 'Delaware', 'US', 'GBP', context);
+  });
 
   test.cb(
     method + ' method: trackEcommerceTransactionWithItems should track an ecommerce transaction and items',
@@ -207,8 +189,11 @@ for (const method of testMethods) {
 
       let requestCount = items.length + 1;
 
-      const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-        const payloadDict = extractPayload(response, method);
+      const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+        error,
+        response
+      ) {
+        const payloadDict = extractPayload(response?.body, method);
         const expected = payloadDict['e'] === 'tr' ? expectedTransaction : expectedItem;
 
         checkPayload(payloadDict, expected, t);
@@ -237,11 +222,12 @@ for (const method of testMethods) {
   );
 
   test.cb(
-    method + ' method: trackEcommerceTransactionWithItems with no items should track an ecommerce transaction and no items events',
+    method +
+      ' method: trackEcommerceTransactionWithItems with no items should track an ecommerce transaction and no items events',
     (t) => {
       t.plan(1);
 
-      const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error) {
+      const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (error) {
         t.pass();
         t.end(error);
       });
@@ -281,8 +267,11 @@ for (const method of testMethods) {
       }),
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 
@@ -308,8 +297,11 @@ for (const method of testMethods) {
       }),
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 
@@ -335,8 +327,11 @@ for (const method of testMethods) {
       dtm: '1000000000000',
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 
@@ -360,8 +355,11 @@ for (const method of testMethods) {
       },
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      const pd = extractPayload(response, method);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      const pd = extractPayload(response?.body, method);
       t.is(
         pd['ue_px'],
         'eyJzY2hlbWEiOiJpZ2x1OmNvbS5zbm93cGxvd2FuYWx5dGljcy5zbm93cGxvdy91bnN0cnVjdF9ldmVudC9qc29uc2NoZW1hLzEtMC0wIiwiZGF0YSI6eyJzY2hlbWEiOiJpZ2x1OmNvbS5hY21lL3ZpZXdlZF9wcm9kdWN0L2pzb25zY2hlbWEvMS0wLTAiLCJkYXRhIjp7InByaWNlIjoyMH19fQ'
@@ -390,8 +388,11 @@ for (const method of testMethods) {
     };
     let count = 2;
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       count--;
       if (count === 0) {
         t.end(error);
@@ -402,14 +403,16 @@ for (const method of testMethods) {
     track.trackPageView('http://www.example.com', 'example page', 'google', context);
   });
 
-
   test.cb(method + ' method: setDomainUserId should attach a duid property to event', (t) => {
     const expected = {
-      duid: 'duid-test-1234'
+      duid: 'duid-test-1234',
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 
@@ -420,11 +423,14 @@ for (const method of testMethods) {
 
   test.cb(method + ' method: setNetworkUserID should attach a nuid property to event', (t) => {
     const expected = {
-      nuid: 'nuid-test-1234'
+      nuid: 'nuid-test-1234',
     };
 
-    const e = emitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, function (error, _body, response) {
-      checkPayload(extractPayload(response, method), expected, t);
+    const e = gotEmitter(endpoint, HttpProtocol.HTTP, undefined, method, 0, undefined, undefined, function (
+      error,
+      response
+    ) {
+      checkPayload(extractPayload(response?.body, method), expected, t);
       t.end(error);
     });
 

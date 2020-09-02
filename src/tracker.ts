@@ -13,8 +13,9 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import { version } from './version';
 import { trackerCore, PayloadData, SelfDescribingJson, Timestamp, Core } from 'snowplow-tracker-core';
+
+import { version } from './version';
 import { Emitter } from './emitter';
 
 export interface EcommerceTransactionItem {
@@ -175,11 +176,11 @@ export function tracker(
 
   const setDomainUserId = function (userId: string) {
     domainUserId = userId;
-  }
+  };
 
   const setNetworkUserId = function (userId: string) {
     networkUserId = userId;
-  }
+  };
 
   return {
     trackEcommerceTransactionWithItems,
