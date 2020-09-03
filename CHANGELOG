@@ -1,3 +1,22 @@
+Version 0.4.0 (2020-09-04)
+--------------------------
+Switch from 'request' to 'got' (#61)
+Remove Vagrant image (#56)
+Add Snyk support (#60)
+Switch to GitHub Actions (#54)
+Add setNetworkUserId method (#23)
+Add setDomainUserId method (#24)
+Add support for dvce_sent_tstamp (#27)
+Bump snowplow-tracker-core to 0.9.1 (#58)
+Switch out Mocha for Ava (#59)
+Add Typescript support (#13)
+Bump NodeJS to support active LTS releases (#55)
+Switch to RollupJS for building ES Module and CJS versions (#57)
+Update project dependencies (#49)
+Update flush to not send a request if the buffer is empty (#53)
+Add Snowplow Maintenance Badge (#47)
+Add CONTRIBUTING.md (#46)
+
 Version 0.3.0 (2017-04-28)
 --------------------------
 Add npm credentials to .travis.yml (#36)
