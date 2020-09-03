@@ -1,7 +1,7 @@
 # Node.js Analytics for Snowplow
 
 [![early-release]][tracker-classificiation]
-[![Build Status][travis-image]][travis]
+[![Build Status][gh-actions-image]][gh-actions]
 [![npm version][npm-image]][npm-url]
 [![Coveralls][coveralls-image]][coveralls]
 
@@ -13,10 +13,10 @@ This tracker lets you collect event data from Node.js applications.
 
 ## Find out more
 
-| Technical Docs                       | Setup Guide                   | Roadmap & Contributing  |
-|--------------------------------------|-------------------------------|-------------------------|
-| [![i1][techdocs-image]][tech-docs] | [![i2][setup-image]][setup] | ![i3][roadmap-image]    |
-| [Technical Docs][tech-docs]          | [Setup Guide][setup]          | _coming soon_           |
+| Technical Docs                       | Setup Guide                   | Contributing                    |
+|--------------------------------------|-------------------------------|---------------------------------|
+| [![i1][techdocs-image]][tech-docs]   | [![i2][setup-image]][setup]   | ![i3][contributing-image]       |
+| [Technical Docs][tech-docs]          | [Setup Guide][setup]          | [Contributing](Contributing.md) |
 
 ## Developers
 
@@ -30,12 +30,13 @@ Install npm dependencies using `npm install`:
 git clone git@github.com:snowplow/snowplow-nodejs-tracker.git
 cd snowplow-nodejs-tracker
 npm install
+npm run build
 npm test
 ```
 
 ## Copyright and license
 
-The Snowplow Node.js Tracker is copyright 2014-2017 Snowplow Analytics Ltd.
+The Snowplow Node.js Tracker is copyright 2014-2020 Snowplow Analytics Ltd.
 
 Licensed under the **[Apache License, Version 2.0][license]** (the "License");
 you may not use this software except in compliance with the License.
@@ -50,18 +51,18 @@ limitations under the License.
 
 [license]: http://www.apache.org/licenses/LICENSE-2.0
 
-[travis-image]: https://travis-ci.org/snowplow/snowplow-nodejs-tracker.png?branch=master
-[travis]: https://travis-ci.org/snowplow/snowplow-nodejs-tracker
+[gh-actions]: https://github.com/snowplow/snowplow-nodejs-tracker/actions
+[gh-actions-image]: https://github.com/snowplow/snowplow-nodejs-tracker/workflows/Build/badge.svg
 [npm-url]: https://badge.fury.io/js/snowplow-tracker
 [npm-image]: https://badge.fury.io/js/snowplow-tracker.svg
-[coveralls-image]: https://coveralls.io/repos/snowplow/snowplow-nodejs-tracker/badge.png?branch=master
-[coveralls]: https://coveralls.io/r/snowplow/snowplow-nodejs-tracker?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/snowplow/snowplow-nodejs-tracker/badge.svg?branch=master
+[coveralls]: https://coveralls.io/github/snowplow/snowplow-nodejs-tracker?branch=master
 
-[tech-docs]: https://github.com/snowplow/snowplow/wiki/node.js-tracker
+[tech-docs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/node-js-tracker/configuration/
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
-[setup]: https://github.com/snowplow/snowplow/wiki/node.js-tracker-setup
+[setup]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/node-js-tracker/setup/
 [setup-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
-[roadmap-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/roadmap.png
+[contributing-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/contributing.png
 
 [tracker-classificiation]: https://github.com/snowplow/snowplow/wiki/Tracker-Maintenance-Classification
 [early-release]: https://img.shields.io/static/v1?style=flat&label=Snowplow&message=Early%20Release&color=014477&labelColor=9ba0aa&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAeFBMVEVMaXGXANeYANeXANZbAJmXANeUANSQAM+XANeMAMpaAJhZAJeZANiXANaXANaOAM2WANVnAKWXANZ9ALtmAKVaAJmXANZaAJlXAJZdAJxaAJlZAJdbAJlbAJmQAM+UANKZANhhAJ+EAL+BAL9oAKZnAKVjAKF1ALNBd8J1AAAAKHRSTlMAa1hWXyteBTQJIEwRgUh2JjJon21wcBgNfmc+JlOBQjwezWF2l5dXzkW3/wAAAHpJREFUeNokhQOCA1EAxTL85hi7dXv/E5YPCYBq5DeN4pcqV1XbtW/xTVMIMAZE0cBHEaZhBmIQwCFofeprPUHqjmD/+7peztd62dWQRkvrQayXkn01f/gWp2CrxfjY7rcZ5V7DEMDQgmEozFpZqLUYDsNwOqbnMLwPAJEwCopZxKttAAAAAElFTkSuQmCC 
