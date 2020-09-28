@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "es2017",                       /* Good for Node 8 - https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping */
+    "lib": ["es2018"],
+    "target": "es2018",                       /* Good for Node 10 - https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping */
     "module": "commonjs",                     /* Ignored by rollup but used by ts-node for tests */
     "declaration": true,                      /* Generates corresponding '.d.ts' file. */
 
