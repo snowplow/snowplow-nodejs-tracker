@@ -1,3 +1,8 @@
+Version 0.4.3 (2020-10-10)
+--------------------------
+Bump snowplow-tracker-core to 0.9.3 (#70)
+Update Snyk to monitor project `snowplow-nodejs-tracker` (#69)
+
 Version 0.4.2 (2020-09-28)
 --------------------------
 Bump got to 11.7.0 (#67)
