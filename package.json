@@ -5,14 +5,13 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "build": "rollup -c && cp -r protos dist",
+    "dev": "rollup -c -w && cp -r protos dist",
     "test": "ava",
     "test+coverage": "nyc --reporter=lcov npm test"
   },
   "files": [
-    "dist",
-    "protos"
+    "dist"
   ],
   "contributors": [
     "Fred Blundun",

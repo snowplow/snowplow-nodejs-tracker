@@ -16,7 +16,7 @@
 import { PayloadDictionary } from 'snowplow-tracker-core';
 import { Emitter } from './emitter';
 
-const PROTO_PATH = __dirname + '../../../protos/collector.proto';
+const PROTO_PATH = __dirname + '/../protos/collector.proto';
 
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
@@ -40,7 +40,7 @@ const CollectorService = protoDescriptor.tracker.CollectorService;
 */
 export function grpcEmitter(
   endpoint: string,
-  bufferSize?: number, 
+  bufferSize?: number,
   callback?: (error?: Error, response?: any) => void
 ): Emitter {
   const targetUrl = endpoint;
