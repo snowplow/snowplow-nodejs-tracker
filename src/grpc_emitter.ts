@@ -47,8 +47,7 @@ export function grpcEmitter(
   const targetUrl = endpoint + (port ? ':' + port : '');
   const maxBufferLength = bufferSize ?? 10;
 
-
-  const client = new CollectorService(targetUrl, grpc.credentials.createInsecure());
+  const client = new CollectorService(targetUrl, grpc.credentials.createSsl());
 
   let buffer: Array<PayloadDictionary> = [];
 
