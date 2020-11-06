@@ -40,10 +40,11 @@ const CollectorService = protoDescriptor.tracker.CollectorService;
 */
 export function grpcEmitter(
   endpoint: string,
+  port?: number,
   bufferSize?: number,
   callback?: (error?: Error, response?: any) => void
 ): Emitter {
-  const targetUrl = endpoint;
+  const targetUrl = endpoint + (port ? ':' + port : '');
   const maxBufferLength = bufferSize ?? 10;
 
 
