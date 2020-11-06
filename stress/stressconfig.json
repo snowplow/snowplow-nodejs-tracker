@@ -1,0 +1,9 @@
+{
+  "emitter": "grpc",
+  "endpoint": "0.0.0.0",
+  "port": 50510,
+  "maxBatchSize": 10,
+  "secureConnection": false,
+  "baseSampleSize": 100,
+  "exponentialIterations": 5
+}

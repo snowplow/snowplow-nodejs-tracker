@@ -1,0 +1,25 @@
+{
+  "name": "node-stress-test",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm pack .. && npm install snowplow-tracker-*.tgz && npx tsc",
+    "stress": "node index.js",
+    "buildAndStress": "npm run build && npm run stress"
+  },
+  "description": "Stress test for node.js tracker",
+  "dependencies": {
+    "@types/uuid": "^8.3.0",
+    "snowplow-tracker": "file:snowplow-tracker-0.5.0-rc2.tgz",
+    "typescript": "^4.0.5",
+    "uuid": "^8.3.1"
+  },
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}
