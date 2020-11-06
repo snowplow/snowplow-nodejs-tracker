@@ -16,4 +16,6 @@
 export { Emitter, HttpMethod, HttpProtocol } from './emitter';
 export { tracker, Tracker, EcommerceTransactionItem } from './tracker';
 export { gotEmitter } from './got_emitter';
+// export { grpcEmitter, GrpcMethod } from './grpc_emitter';
+export { grpcEmitter } from './grpc_emitter';
 export { version } from './version';
