@@ -5,6 +5,14 @@
 [![npm version][npm-image]][npm-url]
 [![Coveralls][coveralls-image]][coveralls]
 
+## Deprecation notice
+
+This version of the Node.js Tracker is now deprecated.
+
+The latest version can be found in the [snowplow-javascript-tracker](https://github.com/snowplow/snowplow-javascript-tracker) repo.
+
+You should switch your applications to use `@snowplow/node-tracker` for the latest updates.
+
 ## Overview
 
 Add analytics to your JavaScript and TypeScript Node.js applications and servers with the Snowplow Node.js Tracker.
